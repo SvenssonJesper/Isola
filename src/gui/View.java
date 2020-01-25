@@ -8,11 +8,7 @@ import java.awt.*;
 
 public class View {
 	
-	private Model model;
-	
 	public View(Model model, int width, int height) {
-		this.model = model;
-		
         //Creating the Frame
         JFrame frame = new JFrame("Isola");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,14 +36,14 @@ public class View {
         panel.add(send);
         panel.add(reset);
 
-        // Text Area at the Center
-        //JTextArea ta = new JTextArea();
-        GamePanel gameGridPanel = new GamePanel(this.model.getBoard());
+        // GamePanel displays the grid
+        GamePanel gameGridPanel = new GamePanel(model);
 
         //Adding Components to the frame.
-        frame.getContentPane().add(BorderLayout.SOUTH, panel);
         frame.getContentPane().add(BorderLayout.NORTH, mb);
         frame.getContentPane().add(BorderLayout.CENTER, gameGridPanel);
+
+        frame.getContentPane().add(BorderLayout.SOUTH, panel);
         frame.setVisible(true);
 
 	}

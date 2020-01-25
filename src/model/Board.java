@@ -1,10 +1,9 @@
 package model;
 
-import java.awt.Color;
 import java.util.Observable;
 
 public class Board extends Observable {
-	private Coordination[][] game;
+	private Tile[][] game;
 	private int width;
 	private int height;
 	
@@ -15,14 +14,12 @@ public class Board extends Observable {
 	}
 	
 	private void setupBoard() {
-		game = new Coordination[width][height];
+		game = new Tile[width][height];
 		for (int x=0; x<game.length; x++) {
 			for (int y=0; y<game[x].length; y++) {
-				game[x][y] = new Tile(TileState.FILLED);
+				game[x][y] = Tile.FILLED;
 			}
 		}
-		game[Math.floorDiv(width, 2)][0] = new Player("test", Color.RED);
-		game[Math.floorDiv(width, 2) - 1][game[game.length - 1].length - 1] = new Player("test", Color.GREEN);
 		
 		this.setChanged();
 		this.notifyObservers();
@@ -35,7 +32,19 @@ public class Board extends Observable {
 		return dim;
 	}
 	
-	public Coordination getLocation(int x, int y) {
+	public void setStartTiles(int x, int y) {
+		game[x][y] = Tile.START;
+	}
+	
+	public Tile getTile(int x, int y) {
 		return game[x][y];
+	}
+	
+	public boolean removeTile(int x, int y) {
+		if (game[x][y] == Tile.FILLED) {
+			game[x][y] = Tile.EMPTY;
+			return true;
+		}
+		return false;
 	}
 }

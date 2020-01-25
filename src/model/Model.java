@@ -1,27 +1,50 @@
 package model;
 
 import java.awt.Color;
+import java.util.Observable;
 
-public class Model {
+public class Model extends Observable{
 	private Player[] players;
 	private int numPlayers;
-	private Coordination[][] game;
-	private Color[] colors = {Color.black, Color.red};
+	private Color[] colors = {Color.BLUE, Color.RED};
+	private int[][] startingPos;
 	private Board b;
+	private int[] dim;
 	
 	public Model(int width, int height, int numPlayers) {
+		this.numPlayers = numPlayers;
+		this.initStartingPos(width, height);
 		this.b = new Board(width, height);
+		this.dim = b.getDim();
+		this.createPlayers();
+		
 	}
 	
-	private void createPlayers() {
-		this.players = new Player[this.numPlayers];
-		for (int i=0; i<this.numPlayers; i++) {
-			this.players[i] = new Player("Player " + Integer.toString(i), colors[i]);
+	private void initStartingPos(int width, int height) {
+		startingPos = new int[2][2];
+		if (width % 2 == 0) {
+			startingPos[0] = new int[] {width/2, 0};
+			startingPos[1] = new int[] {width/2 -1, height-1};
+		}else {
+			startingPos[0] = new int[] {width/2, 0};
+			startingPos[1] = new int[] {( (int) Math.ceil(width/2.0)), height-1};
 		}
 	}
 	
-	private void placePlayer(int i, int j, Player player) {
-		game[i][j] = player;
+	private void createPlayers() {
+		players = new Player[numPlayers];
+		for (int i=0; i<numPlayers; i++) {
+			players[i] = new Player("Player " + Integer.toString(i), colors[i]);
+			int[] stPos = startingPos[i];
+			players[i].move(stPos[0], stPos[1]);
+			b.setStartTiles(stPos[0], stPos[1]);
+		}
+		this.setChanged();
+		this.notifyObservers();
+	}
+	
+	public Player[] getPlayers() {
+		return players;
 	}
 	
 	public Board getBoard() {

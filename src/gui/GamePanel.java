@@ -13,18 +13,26 @@ import model.*;
 
 public class GamePanel extends JPanel implements Observer{
 
+	//Generated serialUID
+	private static final long serialVersionUID = 5018457319560631120L;
+	
 	private final int UNIT_SIZE = 50;
 	private Board board;
+	private Player[] players;
+	private Model model;
 	
 	
-	public GamePanel(Board board) {
-		this.board = board;
+	public GamePanel(Model model) {
+		this.model = model;
+		this.model.addObserver(this);
+		this.players = model.getPlayers();
+		this.board = model.getBoard();
 		this.board.addObserver(this);
 		int[] dim = this.board.getDim();
 		Dimension d = new Dimension(dim[0]*UNIT_SIZE+1, dim[1]*UNIT_SIZE+1);
 		this.setMinimumSize(d);
 		this.setPreferredSize(d);
-		this.setBackground(Color.WHITE);
+		this.setBackground(Color.BLACK);
 	}
 
 	
@@ -44,26 +52,37 @@ public class GamePanel extends JPanel implements Observer{
 		int[] dim = board.getDim();
 		for (int x = 0; x < dim[0]; x++) {
 			for (int y = 0; y < dim[1]; y++) {
-				int startx = x * UNIT_SIZE;
-				int starty = y * UNIT_SIZE;
 				g.setColor(Color.BLACK);
-				g.drawRect(startx, starty, UNIT_SIZE, UNIT_SIZE);
+				g.drawRect(x * UNIT_SIZE, y * UNIT_SIZE, UNIT_SIZE, UNIT_SIZE);
 				
-				Coordination coord = board.getLocation(x, y);
+				Tile tile = board.getTile(x, y);
 				
-				if (coord instanceof Player) {
-					g.setColor(((Player) coord).getColor());
-					g.fillOval(startx + 1, starty + 1, UNIT_SIZE - 2,
+				if (tile == Tile.FILLED) {
+					g.setColor(Color.YELLOW);
+					g.fillRect(x * UNIT_SIZE + 1, y * UNIT_SIZE + 1, UNIT_SIZE - 2,
 							UNIT_SIZE - 2);
-				} else if (coord instanceof Tile) {
-					if (((Tile) coord).getState() == TileState.FILLED) {
-						g.setColor(Color.BLACK);
-						g.fillRect(startx + 1, starty + 1, UNIT_SIZE - 2,
-								UNIT_SIZE - 2);
-					}
-					
+				}
+				if (tile == Tile.START) {
+					g.setColor(Color.GREEN);
+					g.fillRect(x * UNIT_SIZE + 1, y * UNIT_SIZE + 1, UNIT_SIZE - 2,
+							UNIT_SIZE - 2);
+					g.setColor(Color.BLACK);
+					g.drawOval(x * UNIT_SIZE + 1, y * UNIT_SIZE + 1, UNIT_SIZE - 2,
+							UNIT_SIZE - 2);
 				}
 			}
+		}
+		
+		for (int i = 0; i < players.length; i++) {
+			
+			g.setColor(players[i].getColor());
+			int[] pos = players[i].getPosition();
+			g.fillOval(pos[0] * UNIT_SIZE + 1, pos[1] * UNIT_SIZE + 1, UNIT_SIZE - 2,
+					UNIT_SIZE - 2);
+			//boarder
+			g.setColor(Color.BLACK);
+			g.drawOval(pos[0] * UNIT_SIZE + 1, pos[1] * UNIT_SIZE + 1, UNIT_SIZE - 2,
+					UNIT_SIZE - 2);
 		}
 		
 	}
