@@ -48,6 +48,14 @@ public class Model extends Observable{
 	}
 	
 	public Board getBoard() {
-		return this.b;
+		return b;
+	}
+	
+	public int[] getDim() {
+		return b.getDim();
+	}
+	
+	public boolean removeTile(int x, int y) {
+		return b.removeTile(x, y);
 	}
 }
