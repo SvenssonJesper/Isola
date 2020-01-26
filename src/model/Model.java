@@ -1,14 +1,16 @@
 package model;
 
 import java.awt.Color;
-import java.util.Observable;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
-public class Model extends Observable{
+public class Model{
 	private Player[] players;
 	private int numPlayers;
 	private Color[] colors = {Color.BLUE, Color.RED};
 	private int[][] startingPos;
 	private Board b;
+	private PropertyChangeSupport changes = new PropertyChangeSupport(this);
 	
 	public Model(int width, int height, int numPlayers) {
 		this.numPlayers = numPlayers;
@@ -34,11 +36,12 @@ public class Model extends Observable{
 		for (int i=0; i<numPlayers; i++) {
 			players[i] = new Player("Player " + Integer.toString(i), colors[i]);
 			int[] stPos = startingPos[i];
+			int[] oldPos = players[i].getPosition();
 			players[i].move(stPos[0], stPos[1]);
 			b.setStartTiles(stPos[0], stPos[1]);
+			changes.firePropertyChange("Player moved", oldPos, players[i].getPosition());
 		}
-		this.setChanged();
-		this.notifyObservers();
+		
 	}
 	
 	public Player[] getPlayers() {
@@ -55,5 +58,13 @@ public class Model extends Observable{
 	
 	public boolean removeTile(int x, int y) {
 		return b.removeTile(x, y);
+	}
+	
+	public void addPropertyChangeListener(PropertyChangeListener l) {
+        changes.addPropertyChangeListener(l);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener l) {
+	        changes.removePropertyChangeListener(l);
 	}
 }

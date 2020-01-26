@@ -5,14 +5,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
-import java.util.Observable;
-import java.util.Observer;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JPanel;
 
 import model.*;
 
-public class GamePanel extends JPanel implements Observer{
+public class GamePanel extends JPanel implements PropertyChangeListener{
 
 	//Generated serialUID
 	private static final long serialVersionUID = 5018457319560631120L;
@@ -26,10 +26,10 @@ public class GamePanel extends JPanel implements Observer{
 	
 	public GamePanel(Model model) {
 		this.model = model;
-		this.model.addObserver(this);
+		this.model.addPropertyChangeListener(this);
 		this.players = model.getPlayers();
 		this.board = model.getBoard();
-		this.board.addObserver(this);
+		this.board.addPropertyChangeListener(this);
 		this.dim = this.board.getDim();
 		
 		Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -56,9 +56,9 @@ public class GamePanel extends JPanel implements Observer{
 		this.repaint();
 	}
 	
-	public void update(Observable arg0, Object arg1) {
-		this.repaint();
-	}
+	 public void propertyChange(PropertyChangeEvent evt) {
+	        this.repaint();
+	    }
 	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);

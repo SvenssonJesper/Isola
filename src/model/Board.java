@@ -1,11 +1,13 @@
 package model;
 
-import java.util.Observable;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
-public class Board extends Observable {
+public class Board{
 	private Tile[][] game;
 	private int width;
 	private int height;
+	private PropertyChangeSupport changes = new PropertyChangeSupport(this);
 	
 	public Board(int width, int height) {
 		this.width = width;
@@ -20,8 +22,8 @@ public class Board extends Observable {
 				game[x][y] = Tile.FILLED;
 			}
 		}
-		this.setChanged();
-		this.notifyObservers();
+		//might need to change "old game" here later on.
+		changes.firePropertyChange("BoardModified", "old game", game);
 	}
 	
 	public int[] getDim() {
@@ -32,9 +34,7 @@ public class Board extends Observable {
 	}
 	
 	public void setStartTiles(int x, int y) {
-		game[x][y] = Tile.START;
-		this.setChanged();
-		this.notifyObservers();
+		changes.firePropertyChange("BoardModified", game, game[x][y] = Tile.START);
 	}
 	
 	public Tile getTile(int x, int y) {
@@ -43,11 +43,17 @@ public class Board extends Observable {
 	
 	public boolean removeTile(int x, int y) {
 		if (game[x][y] == Tile.FILLED) {
-			game[x][y] = Tile.EMPTY;
-			this.setChanged();
-			this.notifyObservers();
+			changes.firePropertyChange("BoardModified", game, game[x][y] = Tile.EMPTY);
 			return true;
 		}
 		return false;
 	}
+	
+	public void addPropertyChangeListener(PropertyChangeListener l) {
+	        changes.addPropertyChangeListener(l);
+	}
+
+	public void removePropertyChangeListener(PropertyChangeListener l) {
+	        changes.removePropertyChangeListener(l);
+    }
 }
