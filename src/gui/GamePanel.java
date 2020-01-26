@@ -84,9 +84,6 @@ public class GamePanel extends JPanel implements PropertyChangeListener{
 					g.setColor(Color.GREEN);
 					g.fillRect(x * tileSize + 1, y * tileSize + 1, tileSize - 2,
 							tileSize - 2);
-					g.setColor(Color.BLACK);
-					g.drawOval(x * tileSize + 1, y * tileSize + 1, tileSize - 2,
-							tileSize - 2);
 				}
 			}
 		}

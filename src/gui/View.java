@@ -3,6 +3,7 @@ package gui;
 import javax.swing.*;
 
 import model.Model;
+import model.Turn;
 
 import java.awt.*;
 import java.awt.event.ComponentEvent;
@@ -70,10 +71,18 @@ public class View {
 				if (x < 0 || x >= max[0] || y < 0 || y >= max[1]) {
 					return;
 				}
-				if (model.removeTile(x, y)){
-					lblInfo.setText("Continue to next move");
-				}else {
-					lblInfo.setText("That is not a valid tile you donkey.");
+				if (model.getTurn() == Turn.MOVE_PLAYER) {
+					if(model.move(x, y)) {
+						lblInfo.setText("Remove one tile");
+					}else {
+						lblInfo.setText("You can only move to active tiles");
+					}
+				}else { 
+					if (model.removeTile(x, y)) {
+						lblInfo.setText(model.getcurPlayer().getName() + "'s turn.");
+					}else {
+						lblInfo.setText("That is not a valid tile you donkey.");
+					}
 				}
 			}
 		};
