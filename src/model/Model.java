@@ -9,13 +9,11 @@ public class Model extends Observable{
 	private Color[] colors = {Color.BLUE, Color.RED};
 	private int[][] startingPos;
 	private Board b;
-	private int[] dim;
 	
 	public Model(int width, int height, int numPlayers) {
 		this.numPlayers = numPlayers;
 		this.initStartingPos(width, height);
 		this.b = new Board(width, height);
-		this.dim = b.getDim();
 		this.createPlayers();
 		
 	}
@@ -27,7 +25,7 @@ public class Model extends Observable{
 			startingPos[1] = new int[] {width/2 -1, height-1};
 		}else {
 			startingPos[0] = new int[] {width/2, 0};
-			startingPos[1] = new int[] {( (int) Math.ceil(width/2.0)), height-1};
+			startingPos[1] = new int[] {width/2, height-1};
 		}
 	}
 	

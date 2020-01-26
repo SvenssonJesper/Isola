@@ -5,6 +5,8 @@ import javax.swing.*;
 import model.Model;
 
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -13,13 +15,14 @@ public class View {
 	
 	private Model model;
 	private JLabel lblInfo;
+	private GamePanel gameGridPanel;
+	private JFrame frame;
 	
-	public View(Model model, int width, int height) {
+	public View(Model model) {
 		this.model = model;
         //Creating the Frame
-        JFrame frame = new JFrame("Isola");
+        frame = new JFrame("Isola");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(width, height);
 
         //Creating the MenuBar and adding components
         JMenuBar mb = new JMenuBar();
@@ -38,14 +41,19 @@ public class View {
         panel.add(lblInfo);   
 
         // GamePanel displays the grid
-        GamePanel gameGridPanel = new GamePanel(model);
+        gameGridPanel = new GamePanel(model);
         gameGridPanel.addMouseListener(getMouseListener(gameGridPanel));
+        gameGridPanel.addComponentListener(new ResizeListener());
 
         //Adding Components to the frame.
         frame.getContentPane().add(BorderLayout.NORTH, mb);
         frame.getContentPane().add(BorderLayout.CENTER, gameGridPanel);
-
         frame.getContentPane().add(BorderLayout.SOUTH, panel);
+        frame.pack();
+        
+        //Spawn the frame in middle of screen
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
         frame.setVisible(true);
 
 	}
@@ -65,11 +73,17 @@ public class View {
 				if (model.removeTile(x, y)){
 					lblInfo.setText("Continue to next move");
 				}else {
-					lblInfo.setText("That is not a tile.");
+					lblInfo.setText("That is not a valid tile you donkey.");
 				}
 			}
 		};
 	}
+	
+	class ResizeListener extends ComponentAdapter {
+        public void componentResized(ComponentEvent e) {
+            gameGridPanel.updateSize(e.getComponent().getWidth(), e.getComponent().getHeight());
+        }
+}
 }
 
 
