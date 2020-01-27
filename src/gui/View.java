@@ -24,6 +24,10 @@ public class View {
         //Creating the Frame
         frame = new JFrame("Isola");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        //Set icon
+        ImageIcon icon = new ImageIcon("res/images/construction.png");
+        frame.setIconImage(icon.getImage());
 
         //Creating the MenuBar and adding components
         JMenuBar mb = new JMenuBar();
