@@ -37,5 +37,5 @@ Update to .jar file
 
 [lside]: (https://www.lakeside.com/homels)
 [GmbH]: (https://www.ravensburger.org/uk/start/index.html)
-[IsolaImg]: (https://cf.geekdo-images.com/imagepagezoom/img/gmTShVoT72vBxR7fQrZV0DTXMLI=/fit-in/1200x900/filters:no_upscale()/pic1932261.jpg "Isola (nordic version of Isolation)")
+[IsolaImg]: (https://cf.geekdo-images.com/imagepagezoom/img/gmTShVoT72vBxR7fQrZV0DTXMLI=/fit-in/1200x900/filters:no_upscale()/pic1932261.jpg)
 [Isola]: (https://boardgamegeek.com/boardgameversion/223480/nordic-first-edition)
