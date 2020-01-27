@@ -1,7 +1,7 @@
 # Isola
 This is a recreation of the game Isolation.
 The nordic version is called Isola and was the version I played as a kid.
-![Isola (nordic version of Isolation)][IsolaImg]
+![Isola (nordic version of Isolation)][BoxImg]
 
 --ToDo--
 
@@ -37,5 +37,5 @@ Update to .jar file
 
 [lside]: (https://www.lakeside.com/homels)
 [GmbH]: (https://www.ravensburger.org/uk/start/index.html)
-[IsolaImg]: (https://cf.geekdo-images.com/imagepagezoom/img/gmTShVoT72vBxR7fQrZV0DTXMLI=/fit-in/1200x900/filters:no_upscale()/pic1932261.jpg)
+[BoxImg]: (https://github.com/SvenssonJesper/Isola/blob/master/res/images/gameBox.png)
 [Isola]: (https://boardgamegeek.com/boardgameversion/223480/nordic-first-edition)
