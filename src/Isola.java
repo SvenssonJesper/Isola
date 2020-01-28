@@ -1,7 +1,7 @@
 import gui.View;
 import model.Model;
 
-public class Main {
+public class Isola {
 	public static void main(String[] args) {
 		Model state = new Model(10, 10, 2);
 		new View(state);
