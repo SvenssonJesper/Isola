@@ -80,7 +80,6 @@ public class Model{
 				moves.add(new int[] {x+d[0], y+ d[1]});
 			}
 		}
-		System.out.printf("\n");
 		return moves;
 	}
 	
