@@ -11,7 +11,7 @@ public class Model{
 	private Player curPlayer;
 	private int curPlayerIndex;
 	private Turn turn;
-	private Color[] colors = {Color.BLUE, Color.RED};
+	private Color[] colors = {Color.BLUE, Color.RED, Color.DARK_GRAY, Color.CYAN};
 	private int[][] startingPos;
 	private Board b;
 	private PropertyChangeSupport changes = new PropertyChangeSupport(this);
@@ -25,14 +25,15 @@ public class Model{
 	}
 	
 	private void initStartingPos(int width, int height) {
-		startingPos = new int[2][2];
-		if (width % 2 == 0) {
-			startingPos[0] = new int[] {width/2 -1, height-1};
-			startingPos[1] = new int[] {width/2, 0};
-		}else {
-			startingPos[0] = new int[] {width/2, height-1};
-			startingPos[1] = new int[] {width/2, 0};
-		}
+		startingPos = new int[4][2];
+		
+		//Set starting pos depending on number of squares
+		startingPos[0] = new int[] {width % 2 == 0 ? width/2 -1 : width/2, height-1};
+		startingPos[1] = new int[] {width/2, 0};
+		startingPos[2] = new int[] {width-1, height/2};
+		startingPos[3] = new int[] {0, height % 2 == 0 ? height/2 -1 : height/2};
+		
+	
 	}
 	
 	private void createPlayers(int numPlayers) {
