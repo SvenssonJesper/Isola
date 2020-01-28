@@ -3,6 +3,8 @@ package model;
 import java.awt.Color;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Model{
 	private Player[] players;
@@ -53,12 +55,52 @@ public class Model{
 	
 	public boolean move(int x, int y) {
 		if (turn == Turn.MOVE_PLAYER) {
-			if (b.getTile(x, y) == Tile.FILLED || b.getTile(x, y) == Tile.START) {
-				int[] oldPos = curPlayer.getPosition();
-				curPlayer.move(x, y);
-				turn = Turn.REMOVE_TILE;
-				changes.firePropertyChange("Player moved", oldPos, curPlayer.getPosition());
+			for (int[] move : getValidMoves(curPlayer)) {
+				if (move[0] == x && move[1] == y){
+					int[] oldPos = curPlayer.getPosition();
+					curPlayer.move(x, y);
+					turn = Turn.REMOVE_TILE;
+					changes.firePropertyChange("Player moved", oldPos, curPlayer.getPosition());
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private List<int[]> getValidMoves(Player p){
+		List<int[]> moves = new ArrayList<int[]>();
+		int[] pos = p.getPosition();
+		int x = pos[0];
+		int y = pos[1];
+		int[][] directions = {{0, 1}, {1, 1}, {1, 0}, {1, -1}, {0, -1}, {-1, -1}, {-1, 0}, {-1, 1}};
+		for (int[] d : directions){
+			if(validMove(x + d[0], y + d[1], p)) {
+				moves.add(new int[] {x+d[0], y+ d[1]});
+			}
+		}
+		System.out.printf("\n");
+		return moves;
+	}
+	
+	private boolean containsPlayer(int x, int y) {
+		for (Player p: players) {
+			int[] pos = p.getPosition();
+			int x0 = pos[0];
+			int y0 = pos[1];
+			if (x0 == x && y0 == y) {
 				return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean validMove(int x, int y, Player p) {
+		if(x >= 0 && x < b.getDim()[0] && y >= 0 && y < b.getDim()[1]) {
+			if (b.getTile(x, y) == Tile.FILLED || b.getTile(x, y) == Tile.START) {
+				if (!containsPlayer(x,y)) {
+					return true;
+				}
 			}
 		}
 		return false;
@@ -86,10 +128,12 @@ public class Model{
 	
 	public boolean removeTile(int x, int y) {
 		if (turn == Turn.REMOVE_TILE) {
-			if (b.removeTile(x, y)) {
-				turn = Turn.MOVE_PLAYER;
-				this.nextPlayer();
-				return true;
+			if (!containsPlayer(x, y)) {
+				if (b.removeTile(x, y)) {
+					turn = Turn.MOVE_PLAYER;
+					this.nextPlayer();
+					return true;
+				}
 			}
 		}
 		return false;
