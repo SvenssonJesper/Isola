@@ -11,6 +11,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 public class View {
 	
@@ -49,7 +50,9 @@ public class View {
         gameGridPanel = new GamePanel(model);
         gameGridPanel.addMouseListener(getMouseListener(gameGridPanel));
         gameGridPanel.addComponentListener(new ResizeListener());
-
+        //Set current moves for start player
+        gameGridPanel.setMoves(model.getValidMoves(model.getcurPlayer()));
+        
         //Adding Components to the frame.
         frame.getContentPane().add(BorderLayout.NORTH, mb);
         frame.getContentPane().add(BorderLayout.CENTER, gameGridPanel);
@@ -78,12 +81,14 @@ public class View {
 				if (model.getTurn() == Turn.MOVE_PLAYER) {
 					if(model.move(x, y)) {
 						lblInfo.setText("Remove one tile");
+						gameGridPanel.setMoves(new ArrayList<int[]>());
 					}else {
 						lblInfo.setText("You can only move to active tiles");
 					}
 				}else { 
 					if (model.removeTile(x, y)) {
 						lblInfo.setText(model.getcurPlayer().getName() + "'s turn.");
+						gameGridPanel.setMoves(model.getValidMoves(model.getcurPlayer()));
 					}else {
 						lblInfo.setText("That is not a valid tile you donkey.");
 					}

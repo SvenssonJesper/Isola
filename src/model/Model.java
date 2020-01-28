@@ -69,7 +69,7 @@ public class Model{
 		return false;
 	}
 	
-	private List<int[]> getValidMoves(Player p){
+	public List<int[]> getValidMoves(Player p){
 		List<int[]> moves = new ArrayList<int[]>();
 		int[] pos = p.getPosition();
 		int x = pos[0];

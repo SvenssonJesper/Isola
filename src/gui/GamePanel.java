@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -22,6 +24,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener{
 	private Player[] players;
 	private Model model;
 	private int[] dim;
+	private List<int[]> moves = new ArrayList<int[]>();
 	
 	
 	public GamePanel(Model model) {
@@ -56,37 +59,49 @@ public class GamePanel extends JPanel implements PropertyChangeListener{
 		this.repaint();
 	}
 	
+	
 	 public void propertyChange(PropertyChangeEvent evt) {
 	        this.repaint();
 	    }
 	
+	 public void setMoves(List<int[]> moves) {
+			this.moves = moves;
+			this.repaint();
+	}
+	 
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		this.drawTiles(g);
+		this.drawMoves(g);
 		this.drawPlayers(g);
-		
+	}
+	
+	
+	private void drawMoves(Graphics g) {
+		for (int[] move: moves) {
+			drawTile(g, move[0], move[1], new Color(255, 255, 161));
+		}
 	}
 	
 	private void drawTiles(Graphics g) {
 		for (int x = 0; x < dim[0]; x++) {
 			for (int y = 0; y < dim[1]; y++) {
-				g.setColor(Color.BLACK);
-				g.drawRect(x * tileSize, y * tileSize, tileSize, tileSize);
-				
 				Tile tile = board.getTile(x, y);
 				
 				if (tile == Tile.FILLED) {
-					g.setColor(Color.YELLOW);
-					g.fillRect(x * tileSize + 1, y * tileSize + 1, tileSize - 2,
-							tileSize - 2);
+					drawTile(g, x, y, Color.YELLOW);
 				}
 				if (tile == Tile.START) {
-					g.setColor(Color.GREEN);
-					g.fillRect(x * tileSize + 1, y * tileSize + 1, tileSize - 2,
-							tileSize - 2);
+					drawTile(g, x, y, Color.GREEN);
 				}
 			}
 		}
+	}
+	
+	private void drawTile(Graphics g, int x, int y, Color c) {
+		g.setColor(c);
+		g.fillRect(x * tileSize + 1, y * tileSize + 1, tileSize - 2,
+				tileSize - 2);
 	}
 	
 	private void drawPlayers(Graphics g) {
