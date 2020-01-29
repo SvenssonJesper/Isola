@@ -11,7 +11,7 @@ public class Model{
 	private Player curPlayer;
 	private int curPlayerIndex;
 	private Turn turn;
-	private Color[] colors = {Color.BLUE, Color.RED, Color.DARK_GRAY, Color.CYAN};
+	private Color[] colors = {Color.CYAN, Color.MAGENTA, Color.DARK_GRAY, Color.ORANGE};
 	private int[][] startingPos;
 	private Board b;
 	private PropertyChangeSupport changes = new PropertyChangeSupport(this);

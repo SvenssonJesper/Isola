@@ -4,6 +4,8 @@ package gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -105,15 +107,22 @@ public class GamePanel extends JPanel implements PropertyChangeListener{
 	}
 	
 	private void drawPlayers(Graphics g) {
-		for (int i = 0; i < players.length; i++) {	
-			g.setColor(players[i].getColor());
-			int[] pos = players[i].getPosition();
+		for (Player p : players) {	
+			g.setColor(p.getColor());
+			int[] pos = p.getPosition();
 			g.fillOval(pos[0] * tileSize + 1, pos[1] * tileSize + 1, tileSize - 2,
 					tileSize - 2);
 			//boarder
 			g.setColor(Color.BLACK);
 			g.drawOval(pos[0] * tileSize + 1, pos[1] * tileSize + 1, tileSize - 2,
 					tileSize - 2);
+			
+			//Draw name
+			Graphics2D g2 = (Graphics2D)g;
+	        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+	        RenderingHints.VALUE_ANTIALIAS_ON);
+
+	        g2.drawString(p.getName(), pos[0] * tileSize + (tileSize/2 - 3*p.getName().length()), pos[1] * tileSize + tileSize/2);
 		}
 	}
 	
