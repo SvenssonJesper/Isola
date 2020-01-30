@@ -32,10 +32,10 @@ will probably result in one of your friends (or you) getting bullied, sorry!
 Write about all modifications
 
 ## How to run
-1. Navigate to the ```run.sh``` script.
-2. run it with the command ```./run.sh```.
+1. Navigate to the `run.sh` script.
+2. run it with the command `./run.sh`.
 
-This will compile the project as ```.Class``` files to the bin folder and then run it.
+This will compile the project as `.Class` files to the bin folder and then run it.
 
 ---ToDo---
 
