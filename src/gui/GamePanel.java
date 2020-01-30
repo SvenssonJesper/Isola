@@ -60,14 +60,18 @@ public class GamePanel extends JPanel implements PropertyChangeListener{
 	
 	
 	 public void propertyChange(PropertyChangeEvent evt) {
-		 System.out.println(evt.getPropertyName());
-		 if (evt.getPropertyName().equals("TileRemoved")) {
+		 if (evt.getPropertyName().equals("NewPlayer")) {
 			 this.moves = model.getValidMoves(model.getcurPlayer());
 		 }
 		 if (evt.getPropertyName().equals("PlayerMoved")) {
 			 this.moves.clear();
 		 }
-	        this.repaint();
+		 
+		 this.repaint();
+		 
+		 if (evt.getPropertyName().equals("PlayerWon")) {
+			 //do something.
+		 }
 	}
 	 
 	public void paintComponent(Graphics g){
@@ -106,15 +110,23 @@ public class GamePanel extends JPanel implements PropertyChangeListener{
 	}
 	
 	private void drawPlayers(Graphics g) {
-		for (Player p : model.getPlayers()) {	
-			g.setColor(p.getColor());
+		for (Player p : model.getPlayers()) {
+			g.setColor(!p.hasLost() ? p.getColor() : Color.BLACK);
 			int[] pos = p.getPosition();
 			g.fillOval(pos[0] * tileSize + 1, pos[1] * tileSize + 1, tileSize - 2,
 					tileSize - 2);
 			//boarder
-			g.setColor(Color.BLACK);
+			if (model.getcurPlayer().equals(p)) {
+				g.setColor(Color.WHITE);
+			}else {
+				g.setColor(Color.BLACK);
+			}
 			g.drawOval(pos[0] * tileSize + 1, pos[1] * tileSize + 1, tileSize - 2,
 					tileSize - 2);
+			
+			if (p.hasLost()) {
+				g.setColor(Color.WHITE);
+			}
 			
 			//Draw name in middle of players
 			Graphics2D g2 = (Graphics2D)g;

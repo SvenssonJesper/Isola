@@ -7,6 +7,7 @@ public class Player {
 	private Color color;
 	private int x = 0;
 	private int y = 0;
+	private boolean lost = false;
 	
 	public Player(String name, Color color) {
 		this.name = name;
@@ -31,5 +32,13 @@ public class Player {
 		pos[0] = x;
 		pos[1] = y;
 		return pos;
+	}
+
+	public boolean hasLost() {
+		return lost;
+	}
+
+	public void setLost(boolean lost) {
+		this.lost = lost;
 	}
 }

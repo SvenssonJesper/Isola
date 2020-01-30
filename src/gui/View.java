@@ -76,6 +76,10 @@ public class View {
 				if (x < 0 || x >= max[0] || y < 0 || y >= max[1]) {
 					return;
 				}
+				//Stops if someone win the game
+				if (model.isWinner(model.getcurPlayer())) {
+					return;
+				}
 				if (model.getTurn() == Turn.MOVE_PLAYER) {
 					if(model.move(x, y)) {
 						lblInfo.setText("Remove one tile");
@@ -85,6 +89,17 @@ public class View {
 				}else { 
 					if (model.removeTile(x, y)) {
 						lblInfo.setText(model.getcurPlayer().getName() + "'s turn.");
+						
+						model.setNextPlayer();
+						while(model.hasLost(model.getcurPlayer())) {
+							lblInfo.setText(model.getcurPlayer().getName() + " has lost :(, this is so sad");
+							model.setNextPlayer();
+						}
+						
+						if (model.isWinner(model.getcurPlayer())) {
+							System.out.printf("%s is the winner!!", model.getcurPlayer().getName());
+						}
+						
 					}else {
 						lblInfo.setText("That is not a valid tile you donkey.");
 					}

@@ -7,9 +7,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class Model{
-	private Player[] players;
+	private List<Player> players;
 	private Player curPlayer;
-	private int curPlayerIndex;
 	private Turn turn;
 	private Color[] colors = {Color.CYAN, Color.MAGENTA, Color.DARK_GRAY, Color.ORANGE};
 	private int[][] startingPos;
@@ -32,24 +31,28 @@ public class Model{
 		startingPos[1] = new int[] {width/2, 0};
 		startingPos[2] = new int[] {width-1, height/2};
 		startingPos[3] = new int[] {0, height % 2 == 0 ? height/2 -1 : height/2};
-		
-	
 	}
 	
 	private void createPlayers(int numPlayers) {
-		players = new Player[numPlayers];
+		players = new ArrayList<Player>();
 		for (int i=0; i<numPlayers; i++) {
-			players[i] = new Player("Player " + Integer.toString(i+1), colors[i]);
+			players.add(new Player("Player " + Integer.toString(i+1), colors[i]));
 			int[] stPos = startingPos[i];
-			players[i].move(stPos[0], stPos[1]);
+			players.get(i).move(stPos[0], stPos[1]);
 			b.setStartTiles(stPos[0], stPos[1]);
 		}
-		curPlayer = players[0];
+		curPlayer = players.get(0);
 	}
 	
-	private void nextPlayer() {
-		curPlayerIndex = curPlayerIndex == players.length -1 ? 0 : curPlayerIndex + 1;
-		curPlayer = players[curPlayerIndex];
+	public void setNextPlayer() {
+		Player oldPlayer = curPlayer;
+		curPlayer = getNextPlayer(players.indexOf(curPlayer));
+		changes.firePropertyChange("NewPlayer", oldPlayer, curPlayer);
+	}
+	
+	private Player getNextPlayer(int index) {
+		int nextIndex = players.size() > index + 1 ? index + 1 : 0;
+		return players.get(nextIndex).hasLost() ? getNextPlayer(nextIndex) : players.get(nextIndex);
 	}
 	
 	public boolean move(int x, int y) {
@@ -67,6 +70,22 @@ public class Model{
 		return false;
 	}
 	
+	public boolean isWinner(Player p) {
+		if (curPlayer.equals(p) && getNextPlayer(players.indexOf(p)).equals(p)) {
+			changes.firePropertyChange("PlayerWon", "", p);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean hasLost(Player p) {
+		if (getValidMoves(p).isEmpty()) {
+			p.setLost(true);
+			return true;
+		}
+		return false;
+	}
+	
 	public List<int[]> getValidMoves(Player p){
 		List<int[]> moves = new ArrayList<int[]>();
 		int[] pos = p.getPosition();
@@ -78,6 +97,7 @@ public class Model{
 				moves.add(new int[] {x+d[0], y+ d[1]});
 			}
 		}
+		
 		return moves;
 	}
 	
@@ -108,7 +128,7 @@ public class Model{
 		return turn;
 	}
 	
-	public Player[] getPlayers() {
+	public List <Player> getPlayers() {
 		return players;
 	}
 	
@@ -129,7 +149,6 @@ public class Model{
 			if (!containsPlayer(x, y)) {
 				if (b.removeTile(x, y)) {
 					turn = Turn.MOVE_PLAYER;
-					this.nextPlayer();
 					changes.firePropertyChange("TileRemoved", Tile.FILLED, Tile.EMPTY);
 					return true;
 				}
