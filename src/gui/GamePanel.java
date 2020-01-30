@@ -22,8 +22,6 @@ public class GamePanel extends JPanel implements PropertyChangeListener{
 	private static final long serialVersionUID = 5018457319560631120L;
 	
 	private int tileSize;
-	private Board board;
-	private Player[] players;
 	private Model model;
 	private int[] dim;
 	private List<int[]> moves = new ArrayList<int[]>();
@@ -32,10 +30,9 @@ public class GamePanel extends JPanel implements PropertyChangeListener{
 	public GamePanel(Model model) {
 		this.model = model;
 		this.model.addPropertyChangeListener(this);
-		this.players = model.getPlayers();
-		this.board = model.getBoard();
-		this.board.addPropertyChangeListener(this);
-		this.dim = this.board.getDim();
+		this.dim = this.model.getBoard().getDim();
+		
+		this.moves = model.getValidMoves(model.getcurPlayer());
 		
 		Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.tileSize = Math.min(screenDim.width/dim[0]/2, screenDim.height/dim[1]/2);
@@ -63,12 +60,14 @@ public class GamePanel extends JPanel implements PropertyChangeListener{
 	
 	
 	 public void propertyChange(PropertyChangeEvent evt) {
+		 System.out.println(evt.getPropertyName());
+		 if (evt.getPropertyName().equals("TileRemoved")) {
+			 this.moves = model.getValidMoves(model.getcurPlayer());
+		 }
+		 if (evt.getPropertyName().equals("PlayerMoved")) {
+			 this.moves.clear();
+		 }
 	        this.repaint();
-	    }
-	
-	 public void setMoves(List<int[]> moves) {
-			this.moves = moves;
-			this.repaint();
 	}
 	 
 	public void paintComponent(Graphics g){
@@ -88,7 +87,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener{
 	private void drawTiles(Graphics g) {
 		for (int x = 0; x < dim[0]; x++) {
 			for (int y = 0; y < dim[1]; y++) {
-				Tile tile = board.getTile(x, y);
+				Tile tile = model.getBoard().getTile(x, y);
 				
 				if (tile == Tile.FILLED) {
 					drawTile(g, x, y, Color.YELLOW);
@@ -107,7 +106,7 @@ public class GamePanel extends JPanel implements PropertyChangeListener{
 	}
 	
 	private void drawPlayers(Graphics g) {
-		for (Player p : players) {	
+		for (Player p : model.getPlayers()) {	
 			g.setColor(p.getColor());
 			int[] pos = p.getPosition();
 			g.fillOval(pos[0] * tileSize + 1, pos[1] * tileSize + 1, tileSize - 2,
@@ -117,12 +116,13 @@ public class GamePanel extends JPanel implements PropertyChangeListener{
 			g.drawOval(pos[0] * tileSize + 1, pos[1] * tileSize + 1, tileSize - 2,
 					tileSize - 2);
 			
-			//Draw name
+			//Draw name in middle of players
 			Graphics2D g2 = (Graphics2D)g;
 	        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 	        RenderingHints.VALUE_ANTIALIAS_ON);
-
-	        g2.drawString(p.getName(), pos[0] * tileSize + (tileSize/2 - 3*p.getName().length()), pos[1] * tileSize + tileSize/2);
+	        
+	        int charSize = 3;
+	        g2.drawString(p.getName(), pos[0] * tileSize + (tileSize/2 - charSize*p.getName().length()), pos[1] * tileSize + tileSize/2);
 		}
 	}
 	

@@ -41,10 +41,8 @@ public class Model{
 		for (int i=0; i<numPlayers; i++) {
 			players[i] = new Player("Player " + Integer.toString(i+1), colors[i]);
 			int[] stPos = startingPos[i];
-			int[] oldPos = players[i].getPosition();
 			players[i].move(stPos[0], stPos[1]);
 			b.setStartTiles(stPos[0], stPos[1]);
-			changes.firePropertyChange("Player moved", oldPos, players[i].getPosition());
 		}
 		curPlayer = players[0];
 	}
@@ -61,7 +59,7 @@ public class Model{
 					int[] oldPos = curPlayer.getPosition();
 					curPlayer.move(x, y);
 					turn = Turn.REMOVE_TILE;
-					changes.firePropertyChange("Player moved", oldPos, curPlayer.getPosition());
+					changes.firePropertyChange("PlayerMoved", oldPos, curPlayer.getPosition());
 					return true;
 				}
 			}
@@ -132,6 +130,7 @@ public class Model{
 				if (b.removeTile(x, y)) {
 					turn = Turn.MOVE_PLAYER;
 					this.nextPlayer();
+					changes.firePropertyChange("TileRemoved", Tile.FILLED, Tile.EMPTY);
 					return true;
 				}
 			}

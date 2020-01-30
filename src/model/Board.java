@@ -1,13 +1,9 @@
 package model;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-
 public class Board{
 	private Tile[][] game;
 	private int width;
 	private int height;
-	private PropertyChangeSupport changes = new PropertyChangeSupport(this);
 	
 	public Board(int width, int height) {
 		this.width = width;
@@ -22,8 +18,6 @@ public class Board{
 				game[x][y] = Tile.FILLED;
 			}
 		}
-		//might need to change "old game" here later on.
-		changes.firePropertyChange("BoardModified", "old game", game);
 	}
 	
 	public int[] getDim() {
@@ -34,7 +28,7 @@ public class Board{
 	}
 	
 	public void setStartTiles(int x, int y) {
-		changes.firePropertyChange("BoardModified", game, game[x][y] = Tile.START);
+		game[x][y] = Tile.START;
 	}
 	
 	public Tile getTile(int x, int y) {
@@ -43,17 +37,9 @@ public class Board{
 	
 	public boolean removeTile(int x, int y) {
 		if (game[x][y] == Tile.FILLED) {
-			changes.firePropertyChange("BoardModified", game, game[x][y] = Tile.EMPTY);
+			game[x][y] = Tile.EMPTY;
 			return true;
 		}
 		return false;
 	}
-	
-	public void addPropertyChangeListener(PropertyChangeListener l) {
-	        changes.addPropertyChangeListener(l);
-	}
-
-	public void removePropertyChangeListener(PropertyChangeListener l) {
-	        changes.removePropertyChangeListener(l);
-    }
 }
