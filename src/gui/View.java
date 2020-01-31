@@ -49,7 +49,7 @@ public class View {
         mRules.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
             	ImageIcon rulesIcon = new ImageIcon("res/images/rulesIcon.png");
-            	JOptionPane.showMessageDialog(null, "Isola is a two-player abstract strategy board game. Normally played on an 8x6 board which is initially filled with tiles (Yellow),\n"
+            	JOptionPane.showMessageDialog(null, "Isola is a two-player abstract strategy board game. It is, normally, played on an 8x6 board which is initially filled with tiles (Yellow),\n"
             			+ "except at the starting positions (Green) of the pieces. Both players have one piece; it is in the middle position of the row closest to his/her side of the board.\r\n" + 
             			"\r\n" + 
             			"A move consists of two subsequent actions:\r\n" + 
