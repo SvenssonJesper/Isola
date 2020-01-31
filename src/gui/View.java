@@ -7,6 +7,8 @@ import model.Turn;
 
 import java.awt.*;
 import java.awt.event.ComponentEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -26,19 +28,41 @@ public class View {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         //Set icon
-        ImageIcon icon = new ImageIcon("res/images/construction.png");
-        frame.setIconImage(icon.getImage());
+        ImageIcon gameIcon = new ImageIcon("res/images/piece.png");
+        frame.setIconImage(gameIcon.getImage());
 
         //Creating the MenuBar and adding components
         JMenuBar mb = new JMenuBar();
-        JMenu m1 = new JMenu("Test");
-        JMenu m2 = new JMenu("Help");
-        mb.add(m1);
-        mb.add(m2);
-        JMenuItem m11 = new JMenuItem("Hej");
-        JMenuItem m22 = new JMenuItem("Hej1");
-        m1.add(m11);
-        m1.add(m22);
+        JMenu mGame = new JMenu("Game");
+        JMenu mHelp = new JMenu("Help");
+        mb.add(mGame);
+        mb.add(mHelp);
+        
+        JMenuItem mRestart = new JMenuItem("Restart");
+        mRestart.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+                    model.restartGame();
+            }
+        });
+        
+        JMenuItem mRules = new JMenuItem("Rules");
+        mRules.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ev) {
+            	ImageIcon rulesIcon = new ImageIcon("res/images/rulesIcon.png");
+            	JOptionPane.showMessageDialog(null, "Isola is a two-player abstract strategy board game. Normally played on an 8x6 board which is initially filled with tiles (Yellow),\n"
+            			+ "except at the starting positions (Green) of the pieces. Both players have one piece; it is in the middle position of the row closest to his/her side of the board.\r\n" + 
+            			"\r\n" + 
+            			"A move consists of two subsequent actions:\r\n" + 
+            			"\r\n" + 
+            			"1. Moving one's piece to a neighboring (horizontally, vertically, or diagonally) position that contains a square but not the opponent's piece\r\n" + 
+            			"2. Removing any tile with no piece on it (the starting positions can't be removed and is always available).\r\n" + 
+            			"\r\n" +
+            			"The player who cannot make any move loses the game.", "Rules", 0, rulesIcon);
+            }
+        });
+        
+        mGame.add(mRestart);
+        mHelp.add(mRules);
 
         //Creating the panel at bottom for message
         JPanel panel = new JPanel();

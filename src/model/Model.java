@@ -14,16 +14,30 @@ public class Model{
 	private int[][] startingPos;
 	private Board b;
 	private PropertyChangeSupport changes = new PropertyChangeSupport(this);
+	private int width, height, numPlayers;
 	
 	public Model(int width, int height, int numPlayers) {
-		this.initStartingPos(width, height);
-		this.b = new Board(width, height);
-		this.createPlayers(numPlayers);
-		this.turn = Turn.MOVE_PLAYER;
-		
+		this.newGame(width, height, numPlayers);
 	}
 	
-	private void initStartingPos(int width, int height) {
+	public void restartGame() {
+		//creates a new game with same variables as before.
+		newGame(this.width, this.height, this.numPlayers);
+	}
+	
+	public void newGame(int width, int height, int numPlayers) {
+		//Set new variables for later use
+		this.width = width;
+		this.height = height;
+		this.numPlayers = numPlayers;
+		
+		this.initStartingPos();
+		this.b = new Board(width, height);
+		this.createPlayers();
+		this.turn = Turn.MOVE_PLAYER;
+	}
+	
+	private void initStartingPos() {
 		startingPos = new int[4][2];
 		
 		//Set starting pos depending on number of squares
@@ -33,7 +47,7 @@ public class Model{
 		startingPos[3] = new int[] {0, height % 2 == 0 ? height/2 -1 : height/2};
 	}
 	
-	private void createPlayers(int numPlayers) {
+	private void createPlayers() {
 		players = new ArrayList<Player>();
 		for (int i=0; i<numPlayers; i++) {
 			players.add(new Player("Player " + Integer.toString(i+1), colors[i]));
@@ -41,7 +55,11 @@ public class Model{
 			players.get(i).move(stPos[0], stPos[1]);
 			b.setStartTiles(stPos[0], stPos[1]);
 		}
-		curPlayer = players.get(0);
+		if (curPlayer != null) {
+			this.setNextPlayer();
+		}else {
+			curPlayer = players.get(0);
+		}
 	}
 	
 	public void setNextPlayer() {

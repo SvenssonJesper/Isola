@@ -28,6 +28,24 @@ public class UnitTest {
 		
 		p.move(5, 7);
 		assertArrayEquals(p.getPosition(), new int[] {5,7});
+		
+		
+		int[] t = p.getPosition();
+		t[0]++;
+		assertNotSame(p.getPosition(), t);
+	}
+	
+	@Test
+	public void createBoard() {
+		Board b = new Board(5,5);
+		
+		assertArrayEquals(b.getDim(), new int[] {5,5});
+	}
 
+	@Test
+	public void createBoard_WithNegativeValues_ThrowsException() {
+		Board b = new Board(-2,-1);
+		
+		
 	}
 }
