@@ -10,7 +10,7 @@ The version I played called [Isola][Isola] was released in 1972 by the company
 [Ravensburger Spieleverlag GmbH][GmbH].
 
 ### Rules :closed_book:
-Isola is a two-player abstract strategy board game. It is played on an 8x6 board which is initially filled with tiles, except at the starting positions of the pieces. Both players have one piece; it is in the middle position of the row closest to his/her side of the board.
+Isola is a two-player abstract strategy board game. It is, normally, played on an 8x6 board which is initially filled with tiles, except at the starting positions of the pieces. Both players have one piece; it is in the middle position of the row closest to his/her side of the board.
 
 <img src="https://github.com/SvenssonJesper/Isola/blob/master/res/images/IsolaBoard.png" alt="Isola game board" width="250">
 
